@@ -1,24 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
+import { getMonth } from "./util";
+import { Box } from "@mui/material";
+import CalendarHeader from "./components/CalendarHeader";
+import Sidebar from "./components/Sidebar";
+import Month from "./components/Month";
 
 function App() {
+  const [currentMonth, setCurrentMonth] = useState(getMonth());
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <React.Fragment>
+      <Box sx={{ height: "100vh", display: "flex", flexDirection: "column" }}>
+        <CalendarHeader />
+        <Box sx={{ display: "flex", flex: "1 1 0%" }}>
+          <Sidebar />
+          <Month month={currentMonth} />
+        </Box>
+      </Box>
+    </React.Fragment>
   );
 }
 
