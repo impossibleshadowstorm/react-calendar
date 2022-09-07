@@ -24,6 +24,7 @@ const Day = ({ day, rowIdx }) => {
   return (
     <Box
       sx={{
+        border: "1px solid",
         borderColor: "rgb(229 231 235)",
         display: "flex",
         flexDirection: "column",
