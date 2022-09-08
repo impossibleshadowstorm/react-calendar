@@ -8,7 +8,6 @@ const Day = ({ day, rowIdx }) => {
       backgroundColor: "rgb(37 99 235)",
       color: "rgb(255 255 255)",
       borderRadius: "100%",
-      width: "1.75rem",
       width: "20px",
       height: "20px",
     };
