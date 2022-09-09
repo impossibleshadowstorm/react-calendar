@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Button, Typography } from "@mui/material";
+import GlobalContext from "../context/GlobalContext";
 
 const CreateEventButton = () => {
+  const { setShowEventModal } = useContext(GlobalContext);
   return (
     <Button
+      onClick={() => setShowEventModal(true)}
       sx={{
-        border: "0.5px solid green",
+        // border: "0.5px solid green",
         padding: "0.4375rem 1.375rem",
         display: "flex",
         alignItems: "center",

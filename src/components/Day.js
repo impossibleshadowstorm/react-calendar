@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Box, Typography } from "@mui/material";
 import dayjs from "dayjs";
+import GlobalContext from "../context/GlobalContext";
 
 const Day = ({ day, rowIdx }) => {
   function getCurrentDayClass() {
@@ -19,6 +20,8 @@ const Day = ({ day, rowIdx }) => {
       ? currentDayStyle
       : noCurrentDayStyle;
   }
+
+  const { setDaySelected, setShowEventModal } = useContext(GlobalContext);
 
   return (
     <Box
@@ -63,6 +66,13 @@ const Day = ({ day, rowIdx }) => {
           {day.format("DD")}
         </Typography>
       </header>
+      <Box
+        sx={{ cursor: "pointer", flex: "1 1 0%" }}
+        onClick={() => {
+          setDaySelected(day);
+          setShowEventModal(true);
+        }}
+      ></Box>
     </Box>
   );
 };

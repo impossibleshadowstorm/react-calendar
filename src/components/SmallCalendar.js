@@ -1,4 +1,4 @@
-import { Typography, Box, Button } from "@mui/material";
+import { Typography, Box } from "@mui/material";
 import dayjs from "dayjs";
 import React, { useState, useEffect, useContext } from "react";
 import { getMonth } from "../util";
@@ -71,6 +71,7 @@ const SmallCalendar = () => {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
+          marginLeft: "5px",
         }}
       >
         <Typography sx={{ fontWeight: "bold", color: "#3C4043" }}>
@@ -105,6 +106,7 @@ const SmallCalendar = () => {
       </header>
       <Box
         sx={{
+          // border: "0.5px solid black",
           display: "grid",
           gridTemplateColumns: "repeat(7, minmax(0, 1fr))",
           gridTemplateRows: "repeat(6, minmax(0, 1fr))",
@@ -114,11 +116,18 @@ const SmallCalendar = () => {
           <span
             key={i}
             style={{
+              borderRadius: "100%",
+              boxShadow:
+                "rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px",
+              margin: "3px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
               fontSize: "0.875rem",
+              fontWeight: "bold",
               lineHeight: "1.25rem",
               textAlign: "center",
               paddingTop: "0.25rem",
-              paddingBottom: "0.25rem",
             }}
           >
             {day.format("dd").charAt()}
@@ -139,7 +148,7 @@ const SmallCalendar = () => {
                   borderRadius: "100%",
                   paddingBottom: "0.25rem",
                   width: "30px",
-                  margin: "2px",
+                  margin: "5px 2px",
                   height: "20px",
                   display: "flex",
                   alignItems: "center",
