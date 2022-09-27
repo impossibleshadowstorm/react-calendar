@@ -8,7 +8,6 @@ const CreateEventButton = () => {
     <Button
       onClick={() => setShowEventModal(true)}
       sx={{
-        // border: "0.5px solid green",
         padding: "0.4375rem 1.375rem",
         display: "flex",
         alignItems: "center",
