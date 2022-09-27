@@ -16,6 +16,7 @@ const monthNavigationButtonStyle = {
   justifyContent: "center",
   "&:hover": {
     backgroundColor: "rgba(32,33,36,0.039)",
+    
   },
 };
 
@@ -28,7 +29,11 @@ const CalendarHeader = () => {
     setMonthIndex(monthIndex + 1);
   }
   function handleReset() {
-    setMonthIndex(monthIndex === dayjs().month() ? monthIndex + Math.random(): dayjs().month());
+    setMonthIndex(
+      monthIndex === dayjs().month()
+        ? monthIndex + Math.random()
+        : dayjs().month()
+    );
   }
 
   return (
@@ -40,7 +45,7 @@ const CalendarHeader = () => {
         paddingRight: "1rem",
         paddingTop: "0.5rem",
         paddingBottom: "0.5rem",
-        height: "46px"
+        height: "46px",
       }}
     >
       {/* <img
@@ -71,13 +76,23 @@ const CalendarHeader = () => {
       >
         <Button
           sx={{
+            backgroundColor: "rgb(102, 108, 255)",
+
             height: "30px",
             width: "64px",
             borderRadius: "8px",
-            border: "1px solid #dadce0",
+            // border: "1px solid #dadce0",
             fontSize: "14px",
             textTransform: "Capitalize",
-            color: "#3C4043",
+            transition:
+              "background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
+            boxShadow: "rgb(76 78 100 / 42%) 0px 4px 8px -4px",
+            color: "#fff",
+            "&:hover": {
+              boxShadow: "rgb(76 78 100 / 56%) 0px 6px 18px -8px",
+              backgroundColor: "rgb(90, 95, 224)",
+              cursor: "pointer",
+            },
           }}
           onClick={handleReset}
         >

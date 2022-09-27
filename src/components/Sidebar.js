@@ -6,7 +6,11 @@ import SmallCalendar from "./SmallCalendar";
 const Sidebar = () => {
   return (
     <aside
-      style={{ border: "2px solid red", padding: "1.25rem", width: "16rem" }}
+      style={{
+        marginTop: "10vh",
+        padding: "1.25rem",
+        width: "16rem",
+      }}
     >
       <CreateEventButton />
       <SmallCalendar />
