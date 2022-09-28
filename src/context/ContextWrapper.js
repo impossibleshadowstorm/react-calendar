@@ -45,8 +45,30 @@ const ContextWrapper = (props) => {
   }, [savedEvents, labels]);
 
   useEffect(() => {
+    fetchAttendanceData();
+
     localStorage.setItem("savedEvents", JSON.stringify(savedEvents));
   }, [savedEvents]);
+
+  const fetchAttendanceData = async () => {
+    const attendanceDataUrl =
+      "https://xpressotimesheet.herokuapp.com/api/timesheet/?employee=32";
+    const token =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjY0MzcxNjEyLCJqdGkiOiIzMjU0MzFjNmJmZDY0OWQ5OWFiNDRlOTQ0OWNiZjI2ZiIsInVzZXJfaWQiOjMyfQ.auJRbDdMXEcfpPLh3DjLCBjmkFlTsML_GQxn7qAtD44";
+
+    const attendanceDataInJson = await fetch(attendanceDataUrl, {
+      method: "GET",
+      headers: {
+        Authorization: `JWT ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((attendanceData) => {
+        return attendanceData;
+      });
+
+    console.log(attendanceDataInJson);
+  };
 
   useEffect(() => {
     setLabels((prevLabels) => {

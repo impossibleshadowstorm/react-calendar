@@ -91,7 +91,7 @@ const EventModal = () => {
               height="15px"
             ></FeatherIcon>
           </Box>
-          <Box sx={{display: "flex"}}>
+          <Box sx={{ display: "flex" }}>
             {selectedEvent && (
               <Box
                 onClick={() => {
