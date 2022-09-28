@@ -5,7 +5,7 @@ import GlobalContext from "../context/GlobalContext";
 
 const Day = ({ day, rowIdx }) => {
   const [dayEvents, setDayEvents] = useState([]);
-  const { setDaySelected, setShowEventModal, filterEvents, setSelectedEvent } =
+  const { setDaySelected, setShowEventModal, filterEvents, setSelectedEvent, monthIndex, savedEvents } =
     useContext(GlobalContext);
 
   useEffect(() => {
@@ -16,6 +16,29 @@ const Day = ({ day, rowIdx }) => {
     setDayEvents(events);
   }, [filterEvents, day]);
 
+  const fetchData = async () => {
+    const attendanceDataUrl =
+      "https://xpressotimesheet.herokuapp.com/api/timesheet/?employee=32";
+    const token =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjY0MzY2NjUxLCJqdGkiOiI2OGM0ZWVlZmFhMDI0NDRiOTZmMmUzNmVmOTZjMGFkNiIsInVzZXJfaWQiOjMyfQ.xccfo6Ex6MhRc3UBcYSEaFLVIpw1Z6pYVb7itc2oKHY";
+
+    const attendanceDataInJson = await fetch(attendanceDataUrl, {
+      method: "GET",
+      headers: {
+        Authorization: `JWT ${token}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((attendanceData) => {
+        return attendanceData;
+      });
+
+    attendanceDataInJson.map((item, index) => {
+      console.log(item)
+      console.log(index)
+    })
+  };
+  
   function getCurrentDayClass() {
     const currentDayStyle = {
       backgroundColor: "rgb(37 99 235)",
