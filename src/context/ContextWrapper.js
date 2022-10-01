@@ -21,6 +21,8 @@ function initEvents() {
   return parsedEvents;
 }
 
+const labelClasses = ["red", "green"];
+
 const ContextWrapper = (props) => {
   const [monthIndex, setMonthIndex] = useState(dayjs().month());
   const [smallCalendarMonth, setSmallCalendarMonth] = useState(null);
@@ -28,6 +30,8 @@ const ContextWrapper = (props) => {
   const [showEventModal, setShowEventModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [labels, setLabels] = useState([]);
+  const [dayEvents, setDayEvents] = useState([]);
+  const [calendarEvent, setCalendarEvent] = useState([]);
 
   const [savedEvents, dispatchCallEvent] = useReducer(
     savedEventReducer,
@@ -43,32 +47,6 @@ const ContextWrapper = (props) => {
         .includes(evt.label)
     );
   }, [savedEvents, labels]);
-
-  useEffect(() => {
-    fetchAttendanceData();
-
-    localStorage.setItem("savedEvents", JSON.stringify(savedEvents));
-  }, [savedEvents]);
-
-  const fetchAttendanceData = async () => {
-    const attendanceDataUrl =
-      "https://xpressotimesheet.herokuapp.com/api/timesheet/?employee=32";
-    const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjY0MzcxNjEyLCJqdGkiOiIzMjU0MzFjNmJmZDY0OWQ5OWFiNDRlOTQ0OWNiZjI2ZiIsInVzZXJfaWQiOjMyfQ.auJRbDdMXEcfpPLh3DjLCBjmkFlTsML_GQxn7qAtD44";
-
-    const attendanceDataInJson = await fetch(attendanceDataUrl, {
-      method: "GET",
-      headers: {
-        Authorization: `JWT ${token}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((attendanceData) => {
-        return attendanceData;
-      });
-
-    console.log(attendanceDataInJson);
-  };
 
   useEffect(() => {
     setLabels((prevLabels) => {
@@ -98,6 +76,108 @@ const ContextWrapper = (props) => {
     setLabels(labels.map((lbl) => (lbl.label === label.label ? label : lbl)));
   }
 
+  //
+  //
+  //
+  //
+
+  useEffect(() => {
+    // console.log(fetchAttendanceData());
+
+    const fetchAttendanceData = async () => {
+      const attendanceDataUrl =
+        "https://xpressotimesheet.herokuapp.com/api/timesheet/?employee=32";
+      const token =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjY0NDM0NzkwLCJqdGkiOiIzZGQzYzhmMGE2ZTI0MDI1OTIxMTA5ZDllMjBiYmMzZSIsInVzZXJfaWQiOjMyfQ.JLn3rpHMnOht3BGwN3tn1_qlwSMccTo10EUyXgeqLWg";
+
+      const attendanceDataInJson = await fetch(attendanceDataUrl, {
+        method: "GET",
+        headers: {
+          Authorization: `JWT ${token}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((attendanceData) => {
+          return attendanceData;
+        });
+
+      console.log(attendanceDataInJson[0]["date"]);
+
+      const currentDate = getCurrentDate();
+
+      const updatingData = [...calendarEvent];
+
+      if (
+        !updatingData.find(
+          (o) =>
+            o.date === attendanceDataInJson[0]["date"] &&
+            o.in_time === attendanceDataInJson[0]["in_time"] &&
+            o.out_time === attendanceDataInJson[0]["out_time"] &&
+            o.overtime_hours === attendanceDataInJson[0]["overtime_hours"]
+        )
+      ) {
+        updatingData.push({
+          date: attendanceDataInJson[0]["date"],
+          in_time: attendanceDataInJson[0]["in_time"],
+          out_time: attendanceDataInJson[0]["out_time"],
+          overtime_hours: attendanceDataInJson[0]["overtime_hours"],
+          title: "Present",
+          label: labelClasses[1],
+          description: "present",
+          id: attendanceDataInJson[0]["date"],
+        });
+      }
+
+      dispatchCallEvent({ type: "push", payload: updatingData[1] });
+
+      console.log(calendarEvent);
+    };
+
+    fetchAttendanceData();
+
+    // localStorage.setItem("savedEvents", JSON.stringify(savedEvents));
+  }, []);
+
+  const getCurrentDate = () => {
+    var todayDate = new Date();
+    var dd = todayDate.getDate();
+    var mm = todayDate.getMonth() + 1;
+    var yyyy = todayDate.getFullYear();
+
+    if (dd < 10) {
+      dd = "0" + dd;
+    }
+    if (mm < 10) {
+      mm = "0" + mm;
+    }
+    todayDate = yyyy + "-" + mm + "-" + dd;
+
+    return todayDate;
+  };
+
+  const [title, setTitle] = useState("");
+  // const [description, setDescription] = useState(
+  //   selectedEvent ? selectedEvent.description : ""
+  // );
+  const [selectedLabel, setSelectedLabel] = useState(labelClasses[0]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const calendarEvent = {
+      title,
+      label: selectedLabel,
+      day: daySelected.valueOf(),
+      id: selectedEvent ? selectedEvent.id : Date.now(),
+    };
+
+    if (selectedEvent) {
+      dispatchCallEvent({ type: "update", payload: calendarEvent });
+    } else {
+      dispatchCallEvent({ type: "push", payload: calendarEvent });
+    }
+    setShowEventModal(false);
+  };
+
   return (
     <GlobalContext.Provider
       value={{
@@ -117,6 +197,8 @@ const ContextWrapper = (props) => {
         labels,
         updateLabel,
         filterEvents,
+        dayEvents,
+        setDayEvents,
       }}
     >
       {props.children}
